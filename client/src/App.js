@@ -1,31 +1,131 @@
 import React, { Component } from "react";
-import logo from "./logo.svg";
-import "./App.css";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ReferenceLine
+} from "recharts";
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      sensorDatas: [],
+      jsontest: []
+    };
+  }
   componentDidMount() {
+    this.intervalId = setInterval(this.getSensorData.bind(this), 3000);
+  }
+  //センサー値取得
+  getSensorData = () => {
     fetch("/sensorData")
       .then(res => res.json())
-      .then(res => console.log(res));
-  }
+      .then(res => {
+        console.log(res);
+        this.setState({ sensorDatas: res });
+      });
+  };
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        <h1>９軸センサー値取得</h1>
+        <div class="sensorGraph">
+          <p>加速度グラフ</p>
+          <Accel sensordata={this.state.sensorDatas} />
+        </div>
+        <div class="sensorGraph">
+          <p>地磁気グラフ</p>
+          <Linear sensordata={this.state.sensorDatas} />
+        </div>
+        <div class="sensorGraph">
+          <p>角速度グラフ</p>
+          <Gyro sensordata={this.state.sensorDatas} />
+        </div>
       </div>
+    );
+  }
+}
+class Accel extends React.Component {
+  render() {
+    return (
+      <LineChart
+        width={500}
+        height={300}
+        data={this.props.sensordata}
+        margin={{
+          top: 20,
+          right: 50,
+          left: 20,
+          bottom: 5
+        }}
+      >
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey="" />
+        <YAxis ticks={[-1, -0.5, 0, 0.5, 1]} />
+        <Tooltip />
+        <Legend />
+        <Line type="monotone" dataKey="ax" stroke="#8884d8" />
+        <Line type="monotone" dataKey="ay" stroke="#82ca9d" />
+        <Line type="monotone" dataKey="az" stroke="#82ca9d" />
+      </LineChart>
+    );
+  }
+}
+class Linear extends React.Component {
+  render() {
+    return (
+      <LineChart
+        width={500}
+        height={300}
+        data={this.props.sensordata}
+        margin={{
+          top: 20,
+          right: 50,
+          left: 20,
+          bottom: 5
+        }}
+      >
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey="" />
+        <YAxis ticks={[-1, -0.5, 0, 0.5, 1]} />
+        <Tooltip />
+        <Legend />
+        <Line type="monotone" dataKey="Lx" stroke="#8884d8" />
+        <Line type="monotone" dataKey="Ly" stroke="#82ca9d" />
+        <Line type="monotone" dataKey="Lz" stroke="#82ca9d" />
+      </LineChart>
+    );
+  }
+}
+
+class Gyro extends React.Component {
+  render() {
+    return (
+      <LineChart
+        width={500}
+        height={300}
+        data={this.props.sensordata}
+        margin={{
+          top: 20,
+          right: 50,
+          left: 20,
+          bottom: 5
+        }}
+      >
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey="" angle={90} height={90} />
+        <YAxis ticks={[-2, 0, 2, 4, 10]} />
+        <Tooltip />
+        <Legend />
+        <Line type="monotone" dataKey="gx" stroke="#8884d8" />
+        <Line type="monotone" dataKey="gy" stroke="#82ca9d" />
+        <Line type="monotone" dataKey="gz" stroke="#82ca9d" />
+      </LineChart>
     );
   }
 }
