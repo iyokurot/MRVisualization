@@ -1,9 +1,11 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const path = require("path");
 
 const PORT = process.env.PORT || 5000;
 const app = express();
 app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname, "/client/build")));
 
 app.get("/", function(req, res, next) {
   res.send("express open");
@@ -15,7 +17,7 @@ app.get("/users", function(req, res, next) {
     name: "name",
     text: "test"
   };
-  res.send(user);
+  res.json(user);
 });
 
 app.get("/sensorData", (req, res) => {
@@ -58,6 +60,9 @@ app.get("/tests", (req, res) => {
     { time: "time", ax: 1, ay: 2, az: 3 }
   ];
   res.send(datas);
+});
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname + "/client/build/index.html"));
 });
 
 app.listen(PORT, () => {
