@@ -10,6 +10,7 @@ app.get("/", function(req, res, next) {
 });
 app.get("/users", function(req, res, next) {
   //res.json("test user");
+
   var user = {
     name: "name",
     text: "test"
