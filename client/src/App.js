@@ -27,7 +27,7 @@ class App extends Component {
       .then(res => res.json())
       .then(res => {
         console.log(res);
-        this.setState({ sensorDatas: res });
+        this.setState({ sensorDatas: res.target });
       });
   };
   render() {
@@ -95,9 +95,9 @@ class Linear extends React.Component {
         <YAxis ticks={[-1, -0.5, 0, 0.5, 1]} />
         <Tooltip />
         <Legend />
-        <Line type="monotone" dataKey="Lx" stroke="#8884d8" />
-        <Line type="monotone" dataKey="Ly" stroke="#82ca9d" />
-        <Line type="monotone" dataKey="Lz" stroke="#82ca9d" />
+        <Line type="monotone" dataKey="lx" stroke="#8884d8" />
+        <Line type="monotone" dataKey="ly" stroke="#82ca9d" />
+        <Line type="monotone" dataKey="lz" stroke="#82ca9d" />
       </LineChart>
     );
   }
@@ -119,7 +119,7 @@ class Gyro extends React.Component {
       >
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="" angle={90} height={90} />
-        <YAxis ticks={[-2, 0, 2, 4, 10]} />
+        <YAxis ticks={[-2, -1, 0, 1, 2]} />
         <Tooltip />
         <Legend />
         <Line type="monotone" dataKey="gx" stroke="#8884d8" />
