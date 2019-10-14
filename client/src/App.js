@@ -6,9 +6,10 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend,
-  ReferenceLine
+  Legend
+  //ReferenceLine
 } from "recharts";
+import "./css/App.css";
 
 class App extends Component {
   constructor(props) {
@@ -34,17 +35,19 @@ class App extends Component {
     return (
       <div className="App">
         <h1>９軸センサー値取得</h1>
-        <div class="sensorGraph">
-          <p>加速度グラフ</p>
-          <Accel sensordata={this.state.sensorDatas} />
-        </div>
-        <div class="sensorGraph">
-          <p>地磁気グラフ</p>
-          <Linear sensordata={this.state.sensorDatas} />
-        </div>
-        <div class="sensorGraph">
-          <p>角速度グラフ</p>
-          <Gyro sensordata={this.state.sensorDatas} />
+        <div className="graphs">
+          <div className="sensorGraph">
+            <p>加速度グラフ</p>
+            <Accel sensordata={this.state.sensorDatas} />
+          </div>
+          <div className="sensorGraph">
+            <p>地磁気グラフ</p>
+            <Linear sensordata={this.state.sensorDatas} />
+          </div>
+          <div className="sensorGraph">
+            <p>角速度グラフ</p>
+            <Gyro sensordata={this.state.sensorDatas} />
+          </div>
         </div>
       </div>
     );
@@ -53,24 +56,14 @@ class App extends Component {
 class Accel extends React.Component {
   render() {
     return (
-      <LineChart
-        width={500}
-        height={300}
-        data={this.props.sensordata}
-        margin={{
-          top: 20,
-          right: 50,
-          left: 20,
-          bottom: 5
-        }}
-      >
+      <LineChart width={400} height={300} data={this.props.sensordata}>
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="" />
+        <XAxis dataKey="" height={50} />
         <YAxis ticks={[-1, -0.5, 0, 0.5, 1]} />
         <Tooltip />
         <Legend />
-        <Line type="monotone" dataKey="ax" stroke="#8884d8" />
-        <Line type="monotone" dataKey="ay" stroke="#82ca9d" />
+        <Line type="monotone" dataKey="ax" stroke="#ee5959" />
+        <Line type="monotone" dataKey="ay" stroke="#8884d8" />
         <Line type="monotone" dataKey="az" stroke="#82ca9d" />
       </LineChart>
     );
@@ -79,24 +72,14 @@ class Accel extends React.Component {
 class Linear extends React.Component {
   render() {
     return (
-      <LineChart
-        width={500}
-        height={300}
-        data={this.props.sensordata}
-        margin={{
-          top: 20,
-          right: 50,
-          left: 20,
-          bottom: 5
-        }}
-      >
+      <LineChart width={400} height={300} data={this.props.sensordata}>
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="" />
+        <XAxis dataKey="" height={50} />
         <YAxis ticks={[-1, -0.5, 0, 0.5, 1]} />
         <Tooltip />
         <Legend />
-        <Line type="monotone" dataKey="lx" stroke="#8884d8" />
-        <Line type="monotone" dataKey="ly" stroke="#82ca9d" />
+        <Line type="monotone" dataKey="lx" stroke="#ee5959" />
+        <Line type="monotone" dataKey="ly" stroke="#8884d8" />
         <Line type="monotone" dataKey="lz" stroke="#82ca9d" />
       </LineChart>
     );
@@ -106,24 +89,14 @@ class Linear extends React.Component {
 class Gyro extends React.Component {
   render() {
     return (
-      <LineChart
-        width={500}
-        height={300}
-        data={this.props.sensordata}
-        margin={{
-          top: 20,
-          right: 50,
-          left: 20,
-          bottom: 5
-        }}
-      >
+      <LineChart width={400} height={300} data={this.props.sensordata}>
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="" angle={90} height={90} />
+        <XAxis dataKey="" angle={90} height={50} />
         <YAxis ticks={[-2, -1, 0, 1, 2]} />
         <Tooltip />
         <Legend />
-        <Line type="monotone" dataKey="gx" stroke="#8884d8" />
-        <Line type="monotone" dataKey="gy" stroke="#82ca9d" />
+        <Line type="monotone" dataKey="gx" stroke="#ee5959" />
+        <Line type="monotone" dataKey="gy" stroke="#8884d8" />
         <Line type="monotone" dataKey="gz" stroke="#82ca9d" />
       </LineChart>
     );

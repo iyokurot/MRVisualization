@@ -1,0 +1,9 @@
+.App {
+}
+.graphs {
+  display: flex;
+}
+.sensorGraph {
+  text-align: center;
+  width: 33%;
+}
