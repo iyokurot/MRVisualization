@@ -20,9 +20,14 @@ const mysqlconnection = mysql.createConnection({
 //MQTT
 const mqtt = require("mqtt");
 const mqttclient = mqtt.connect({
-  host: "localhost",
+  host: "192.168.1.6",
   port: 1883,
   clientId: "http.subscriber"
+});
+const mqttclienteuler = mqtt.connect({
+  host: "192.168.1.6",
+  port: 1883,
+  clientId: "http.subscriber.euler"
 });
 
 app.use(bodyParser.json());
@@ -34,17 +39,16 @@ mqttclient.subscribe("itoyuNineAxis");
 mqttclient.on("message", function(topic, message) {
   const messages = message.toString();
 
-  console.log(messages);
+  //console.log(messages);
   //message=>jsonへ
   var obj = new Function("return " + messages)();
-  //var json = JSON.parse(obj);
-  //console.log(json);
+  console.log(obj);
   //MySQLtest
-  /*
+
   mysqlconnection.query(
     "insert into axisdata (datetime,ax,ay,az,lx,ly,lz,gx,gy,gz) values(?,?,?,?,?,?,?,?,?,?)",
     [
-      20191115,
+      obj.datetime,
       obj.ax,
       obj.ay,
       obj.az,
@@ -60,7 +64,23 @@ mqttclient.on("message", function(topic, message) {
       //console.log(results);
     }
   );
-  */
+});
+mqttclienteuler.subscribe("itoyuNineAxis/Euler");
+mqttclienteuler.on("message", function(topic, message) {
+  const messages = message.toString();
+
+  //console.log(messages);
+  //message=>jsonへ
+  var obj = new Function("return " + messages)();
+  //console.log(obj);
+  mysqlconnection.query(
+    "insert into eulerdata (datetime,head,pitch,roll) values(?,?,?,?)",
+    [obj.datetime, obj.head, obj.pitch, obj.roll],
+    function(error, results, fields) {
+      if (error) throw error;
+      //console.log(results);
+    }
+  );
 });
 
 app.get("/", function(req, res, next) {
@@ -76,6 +96,14 @@ app.get("/users", function(req, res, next) {
 });
 
 app.get("/sensorData", async (req, res) => {
+  mysqlconnection.query(
+    "select * from axisdata order by id desc limit 8",
+    function(error, results, fields) {
+      if (error) throw error;
+      res.send(results);
+    }
+  );
+  /*
   try {
     const client = await pool.connect();
     const result = await client.query(
@@ -90,6 +118,7 @@ app.get("/sensorData", async (req, res) => {
     console.log(err);
     res.send("");
   }
+  */
 });
 
 app.get("/tests", (req, res) => {
