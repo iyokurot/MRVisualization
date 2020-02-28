@@ -42,7 +42,7 @@ mqttclient.on("message", function(topic, message) {
   //console.log(messages);
   //message=>jsonへ
   var obj = new Function("return " + messages)();
-  console.log(obj);
+  //console.log(obj);
   //MySQLtest
 
   mysqlconnection.query(
@@ -72,7 +72,7 @@ mqttclienteuler.on("message", function(topic, message) {
   //console.log(messages);
   //message=>jsonへ
   var obj = new Function("return " + messages)();
-  //console.log(obj);
+  console.log(obj);
   mysqlconnection.query(
     "insert into eulerdata (datetime,head,pitch,roll) values(?,?,?,?)",
     [obj.datetime, obj.head, obj.pitch, obj.roll],
